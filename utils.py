@@ -73,7 +73,7 @@ def crop_roi_image(img, box):
 
 def make_bounding_boxes(img, y, x, Y, X)
     draw = ImageDraw.Draw(img)
-    w, h = image.size
+    w, h = img.size
     l = x*w
     r = X*w
     t = y*h
