@@ -16,8 +16,7 @@ camera’s field of view.
 i.e., whether it’s red, yellow, green.
 
 ## 2 Detection
-[MobileNetv1](https://arxiv.org/pdf/1704.04861.pdf)https://arxiv.org/pdf/1704.04861.pdf)!
-
+[MobileNetv1](https://arxiv.org/pdf/1704.04861.pdf)
 ## 3 Color Classification
 We use a simple algorithm to find the color of the traffic light
   1. Convert image to HSV.
