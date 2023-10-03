@@ -16,7 +16,14 @@ camera’s field of view.
 i.e., whether it’s red, yellow, green.
 
 ## 2 Detection
-[MobileNetv1](https://arxiv.org/pdf/1704.04861.pdf)
+We use [MobileNetv1](https://arxiv.org/pdf/1704.04861.pdf) model.
+
+MobileNet SSD v1 is primarily used for the task of object detection, which involves identifying and locating objects of interest within an image or video frame. 
+
+It can detect multiple object classes simultaneously. 
+
+In the COCO dataset, the 10th class is traffic lights
+
 ## 3 Color Classification
 We use a simple algorithm to find the color of the traffic light
   1. Convert image to HSV.
