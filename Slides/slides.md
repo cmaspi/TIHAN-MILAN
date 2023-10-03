@@ -30,12 +30,12 @@ MobileNet SSD v3 is primarily used for the task of object detection, which invol
 
 # Example
 **Test Image**
-![center width:700](lajpat.png)
+![center width:700](images/lajpat.png)
 <p align='center'>courtesy: Google Maps</p>
 
 ---
 # Bounding Boxes
-![center width:700](sample_result.png)
+![center width:700](images/sample_result.png)
 
 ---
 
