@@ -1,11 +1,11 @@
 import tensorflow as tf
 import sys
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import os
 import numpy as np
 from glob import glob
 import matplotlib.pyplot as plt
-
+from skimage.color import rgb2hsv
 
 class TLClassifier(object):
     def __init__(self, model_path):
@@ -29,7 +29,7 @@ class TLClassifier(object):
         self.classes = self.graph.get_tensor_by_name('detection_classes:0')
         self.num_detections = self.graph.get_tensor_by_name('num_detections:0')
         
-        self.sess = tf.compat.v1.Session(graph=self.detection_graph)
+        self.sess = tf.compat.v1.Session(graph=self.graph)
 
         # run the first session to "warm up"
         img = np.zeros((100, 100, 3))
@@ -49,7 +49,7 @@ class TLClassifier(object):
         image_np_expanded = np.expand_dims(image_np, axis=0)
 
         output = self.sess.run([self.boxes, self.scores, self.classes, self.num_detections], 
-                feed_dict={self.image_tensor: image_np_expanded})
+                feed_dict={self.image: image_np_expanded})
         
         squeezed_scores = np.squeeze(output[1])
         squeezed_classes = np.squeeze(output[2])
@@ -70,9 +70,9 @@ def crop_roi_image(img, box):
     return cropped
 
 
-
-def make_bounding_boxes(img, y, x, Y, X)
+def make_bounding_boxes(img, box):
     draw = ImageDraw.Draw(img)
+    y, x, Y, X = box
     w, h = img.size
     l = x*w
     r = X*w
@@ -80,3 +80,30 @@ def make_bounding_boxes(img, y, x, Y, X)
     b = Y*h
     draw.line([(l, t), (l, b), (r, b), (r, t), (l, t)],width=5, fill='black')
 
+
+def detect_traffic_light_color(image):
+    # Convert the image to the HSV color space
+    hsv_image = rgb2hsv(image)*255
+
+    hue = hsv_image[:, :, 0]
+    sat = hsv_image[:, :, 1]
+
+    sat_mask = sat > np.percentile(sat, 90)
+    hue_avg = hue[sat_mask].mean()
+
+    if hue_avg > 70 and hue_avg < 150:
+        return 'green'
+    if 20 < hue_avg < 50:
+        return 'yellow'
+    if hue_avg > 150 or hue_avg < 20:
+        return 'red'
+    return 'unable to predict, hue avg: {}'.format(hue_avg)
+
+
+font = ImageFont.truetype('arial', 40)
+
+
+def write_text(img, text, loc, text_color):
+    imw, imh = img.size
+    loc = (loc[0]*imw-70, loc[1]*imh+70)
+    ImageDraw.Draw(img).text(loc, text, text_color=text_color, font=font)
