@@ -7,10 +7,6 @@ import sys
 from PIL import Image, ImageDraw
 
 
-model_path = 'ssd_mobilenet_v1_coco_11_06_2017/frozen_inference_graph.pb'
-
-
-
 def load_detection_graph(model_path):
     # Create a new TensorFlow graph for object detection
     detection_graph = tf.Graph()
@@ -42,7 +38,7 @@ def select_filtered_boxes(boxes,
     
     # Create a boolean mask to select boxes based on class and score criteria
     selection_mask = np.logical_and(squeezed_classes == target_class,
-                                     squeezed_scores > score_threshold)
+                                    squeezed_scores > score_threshold)
     
     # Use the mask to select the relevant boxes
     selected_boxes = squeezed_boxes[selection_mask]
@@ -51,7 +47,7 @@ def select_filtered_boxes(boxes,
 
 
 class TLClassifier(object):
-    def __init__(self):
+    def __init__(self, model_path):
         self.detection_graph = load_detection_graph(model_path)
         self.extract_graph_components()
         self.sess = tf.compat.v1.Session(graph=self.detection_graph)
